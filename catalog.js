@@ -389,7 +389,7 @@ function handleMethodFilter(e) {
             filteredProducts = products.filter(product => product.price >= 200); // Продукты с ценой ≥ 200
             break;
         case 'filter-rating':
-            filteredProducts = products.filter(product => product.rating >= 4.5); // Продукты с рейтингом ≥ 4.5
+            filteredProducts = products.filter(product => product.rating >= 4.9); // Продукты с рейтингом ≥ 4.5
             break;
         case 'filter-new':
             filteredProducts = products.filter(product => product.isNew); // Только новые продукты
