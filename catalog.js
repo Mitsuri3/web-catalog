@@ -1,3 +1,4 @@
+// Массив продуктов, содержащий данные об услугах (id, название, категория, цена и т.д.)
 const products = [
     { 
         id: 1, 
@@ -181,95 +182,99 @@ const products = [
     }
 ];
 
-// DOM Elements
-const productsContainer = document.getElementById('productsContainer');
-const searchInput = document.getElementById('searchInput');
-const sortSelect = document.getElementById('sortSelect');
-const categoryFilter = document.getElementById('categoryFilter');
-const methodButtons = document.querySelectorAll('.method-btn');
-const cartButton = document.getElementById('cartButton');
-const cartModal = document.getElementById('cartModal');
-const cartItemsContainer = document.getElementById('cartItems');
-const cartTotal = document.getElementById('cartTotal');
-const cartCount = document.getElementById('cartCount');
-const closeCart = document.querySelector('.close-cart');
-const checkoutBtn = document.getElementById('checkoutBtn');
-const notification = document.getElementById('notification');
-const notificationMessage = document.getElementById('notificationMessage');
-const favoritesButton = document.getElementById('favoritesButton');
-const favoritesModal = document.getElementById('favoritesModal');
-const favoritesItemsContainer = document.getElementById('favoritesItems');
-const favoritesCount = document.getElementById('favoritesCount');
-const closeFavorites = document.querySelector('.close-favorites');
-const clearFavoritesBtn = document.getElementById('clearFavoritesBtn');
+// Элементы DOM для работы с интерфейсом
+const productsContainer = document.getElementById('productsContainer'); // Контейнер для карточек товаров
+const searchInput = document.getElementById('searchInput'); // Поле ввода для поиска
+const sortSelect = document.getElementById('sortSelect'); // Выпадающий список для сортировки
+const categoryFilter = document.getElementById('categoryFilter'); // Контейнер для кнопок фильтрации по категориям
+const methodButtons = document.querySelectorAll('.method-btn'); // Кнопки дополнительных методов фильтрации
+const cartButton = document.getElementById('cartButton'); // Кнопка открытия корзины
+const cartModal = document.getElementById('cartModal'); // Модальное окно корзины
+const cartItemsContainer = document.getElementById('cartItems'); // Контейнер для элементов корзины
+const cartTotal = document.getElementById('cartTotal'); // Элемент для отображения общей суммы корзины
+const cartCount = document.getElementById('cartCount'); // Счетчик товаров в корзине
+const closeCart = document.querySelector('.close-cart'); // Кнопка закрытия корзины
+const checkoutBtn = document.getElementById('checkoutBtn'); // Кнопка оформления заказа
+const notification = document.getElementById('notification'); // Контейнер для уведомлений
+const notificationMessage = document.getElementById('notificationMessage'); // Текст уведомления
+const favoritesButton = document.getElementById('favoritesButton'); // Кнопка открытия избранного
+const favoritesModal = document.getElementById('favoritesModal'); // Модальное окно избранного
+const favoritesItemsContainer = document.getElementById('favoritesItems'); // Контейнер для элементов избранного
+const favoritesCount = document.getElementById('favoritesCount'); // Счетчик избранных товаров
+const closeFavorites = document.querySelector('.close-favorites'); // Кнопка закрытия избранного
+const clearFavoritesBtn = document.getElementById('clearFavoritesBtn'); // Кнопка очистки избранного
 
-// State
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
-let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-let currentProducts = [...products]; // Store current filtered/sorted products
+// Состояние приложения
+let cart = JSON.parse(localStorage.getItem('cart')) || []; // Корзина, загружаемая из localStorage
+let favorites = JSON.parse(localStorage.getItem('favorites')) || []; // Избранное, загружаемое из localStorage
+let currentProducts = [...products]; // Текущие отфильтрованные/отсортированные продукты
 
-// Initialize
+// Инициализация приложения при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
-    renderProducts(currentProducts);
-    updateCart();
-    updateFavorites();
-    setupEventListeners();
+    renderProducts(currentProducts); // Отрисовываем начальный список продуктов
+    updateCart(); // Обновляем состояние корзины
+    updateFavorites(); // Обновляем состояние избранного
+    setupEventListeners(); // Устанавливаем слушатели событий
 });
 
-// Event Listeners
+// Установка слушателей событий для интерактивных элементов
 function setupEventListeners() {
-    // Search
+    // Поиск: реагируем на ввод текста в поле поиска
     searchInput.addEventListener('input', handleSearch);
 
-    // Sort
+    // Сортировка: реагируем на выбор критерия сортировки
     sortSelect.addEventListener('change', handleSort);
 
-    // Category filter
+    // Фильтрация по категориям: реагируем на клик по кнопкам категорий
     categoryFilter.addEventListener('click', handleCategoryFilter);
 
-    // Method buttons
+    // Дополнительные методы фильтрации: реагируем на клик по кнопкам методов
     methodButtons.forEach(button => {
         button.addEventListener('click', handleMethodFilter);
     });
 
-    // Cart
+    // Корзина: открытие, закрытие, оформление заказа
     cartButton.addEventListener('click', showCart);
     closeCart.addEventListener('click', hideCart);
     checkoutBtn.addEventListener('click', handleCheckout);
 
-    // Favorites
+    // Избранное: открытие, закрытие, очистка
     favoritesButton.addEventListener('click', showFavorites);
     closeFavorites.addEventListener('click', hideFavorites);
     clearFavoritesBtn.addEventListener('click', handleClearFavorites);
 }
 
-// Render products
+// Отрисовка карточек продуктов на странице
 function renderProducts(productsToRender) {
+    // Проверяем наличие контейнера для продуктов
     if (!productsContainer) {
-        console.error('productsContainer element not found');
+        console.error('Контейнер productsContainer не найден');
         return;
     }
+    // Если продуктов нет или передан некорректный массив, показываем сообщение
     if (!Array.isArray(productsToRender) || productsToRender.length === 0) {
-        productsContainer.innerHTML = '<p>No products found.</p>';
+        productsContainer.innerHTML = '<p>Товары не найдены.</p>';
         return;
     }
 
+    // Очищаем контейнер перед отрисовкой
     productsContainer.innerHTML = '';
+    // Создаем карточку для каждого продукта
     productsToRender.forEach(product => {
-        const isFavorited = favorites.some(fav => fav.id === product.id);
+        const isFavorited = favorites.some(fav => fav.id === product.id); // Проверяем, добавлен ли продукт в избранное
         const productCard = document.createElement('div');
         productCard.className = 'product-card';
         productCard.innerHTML = `
             <img src="${product.img}" alt="${product.name}">
-            ${product.isNew ? '<span class="product-badge">New</span>' : ''}
-            ${product.discount > 0 ? `<span class="product-badge">${product.discount}% Off</span>` : ''}
+            ${product.isNew ? '<span class="product-badge">New</span>' : ''} <!-- Бейдж "New" для новых продуктов -->
+            ${product.discount > 0 ? `<span class="product-badge">${product.discount}% Off</span>` : ''} <!-- Бейдж скидки -->
             <div class="product-info">
                 <h3 class="product-title">${product.name}</h3>
                 <p class="product-description">${product.description}</p>
                 <p class="product-price">$${product.price}</p>
                 <p class="product-rating">★ ${product.rating}</p>
                 <div style="display: flex; gap: 10px; justify-content: center;">
-                    <button class="button add-to-cart" data-id="${product.id}">Add to Cart</button>
+                    <button class="button add-to-cart" data-id="${product.id}">Добавить в корзину</button>
                     <button class="button toggle-favorite" data-id="${product.id}">
                         ${isFavorited ? 'Удалить из избранного' : 'Добавить в избранное'}
                         <i class="fas fa-heart" style="color: ${isFavorited ? '#ff4444' : '#aaa'}; margin-left: 5px;"></i>
@@ -277,167 +282,180 @@ function renderProducts(productsToRender) {
                 </div>
             </div>
         `;
-        productsContainer.appendChild(productCard);
+        productsContainer.appendChild(productCard); // Добавляем карточку в контейнер
     });
 }
 
-// Global event delegation for buttons
+// Установка глобальной делегации событий для кнопок на карточках
 function setupProductEventListeners() {
-    // Remove existing listener to prevent duplicates
+    // Удаляем существующий слушатель, чтобы избежать дублирования
     productsContainer.removeEventListener('click', handleProductClick);
+    // Добавляем новый слушатель для обработки кликов по кнопкам
     productsContainer.addEventListener('click', handleProductClick);
 }
 
+// Обработка кликов по кнопкам на карточках продуктов
 function handleProductClick(e) {
-    const button = e.target.closest('button');
-    if (!button) return;
-    const id = parseInt(button.dataset.id);
+    const button = e.target.closest('button'); // Находим ближайшую кнопку
+    if (!button) return; // Если кнопка не найдена, выходим
+    const id = parseInt(button.dataset.id); // Получаем ID продукта
+    // Обрабатываем клик по кнопке "Добавить в корзину"
     if (button.classList.contains('add-to-cart')) {
         handleAddToCart({ target: button });
+    // Обрабатываем клик по кнопке "Добавить/Удалить из избранного"
     } else if (button.classList.contains('toggle-favorite')) {
         handleToggleFavorite({ target: button });
     }
 }
 
-// Call setup on initialization and after each render
+// Установка слушателя событий для карточек при загрузке страницы
 document.addEventListener('DOMContentLoaded', setupProductEventListeners);
 
-// Search handler
+// Обработчик поиска по названию продукта
 function handleSearch() {
-    const searchTerm = searchInput.value.trim().toLowerCase();
+    const searchTerm = searchInput.value.trim().toLowerCase(); // Получаем поисковый запрос
+    // Фильтруем продукты по совпадению с названием
     currentProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchTerm)
     );
-    renderProducts(currentProducts);
-    setupProductEventListeners(); // Re-attach event listeners
+    renderProducts(currentProducts); // Отрисовываем отфильтрованные продукты
+    setupProductEventListeners(); // Переустанавливаем слушатели событий
 }
 
-// Sort handler
+// Обработчик сортировки продуктов
 function handleSort() {
-    const sortValue = sortSelect.value;
-    currentProducts = [...currentProducts];
+    const sortValue = sortSelect.value; // Получаем выбранный критерий сортировки
+    currentProducts = [...currentProducts]; // Создаем копию текущих продуктов
 
+    // Сортируем продукты в зависимости от критерия
     switch (sortValue) {
         case 'price-asc':
-            currentProducts.sort((a, b) => a.price - b.price);
+            currentProducts.sort((a, b) => a.price - b.price); // По цене: по возрастанию
             break;
         case 'price-desc':
-            currentProducts.sort((a, b) => b.price - a.price);
+            currentProducts.sort((a, b) => b.price - a.price); // По цене: по убыванию
             break;
         case 'name-asc':
-            currentProducts.sort((a, b) => a.name.localeCompare(b.name));
+            currentProducts.sort((a, b) => a.name.localeCompare(b.name)); // По названию: A-Z
             break;
         case 'name-desc':
-            currentProducts.sort((a, b) => b.name.localeCompare(b.name));
+            currentProducts.sort((a, b) => b.name.localeCompare(b.name)); // По названию: Z-A
             break;
         case 'rating-desc':
-            currentProducts.sort((a, b) => b.rating - a.rating);
+            currentProducts.sort((a, b) => b.rating - a.rating); // По рейтингу: по убыванию
             break;
         case 'popularity':
-            currentProducts.sort((a, b) => b.popularity - a.popularity);
+            currentProducts.sort((a, b) => b.popularity - a.popularity); // По популярности: по убыванию
             break;
     }
 
-    renderProducts(currentProducts);
-    setupProductEventListeners(); // Re-attach event listeners
+    renderProducts(currentProducts); // Отрисовываем отсортированные продукты
+    setupProductEventListeners(); // Переустанавливаем слушатели событий
 }
 
-// Category filter handler
+// Обработчик фильтрации по категориям
 function handleCategoryFilter(e) {
+    // Проверяем, что клик был по кнопке категории
     if (e.target.classList.contains('category-btn')) {
-        const category = e.target.dataset.category;
+        const category = e.target.dataset.category; // Получаем выбранную категорию
+        // Удаляем активный класс у всех кнопок
         document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
-        e.target.classList.add('active');
+        e.target.classList.add('active'); // Добавляем активный класс текущей кнопке
 
+        // Фильтруем продукты: все или по выбранной категории
         currentProducts = category === 'all'
             ? [...products]
             : products.filter(product => product.category === category);
-        renderProducts(currentProducts);
-        setupProductEventListeners(); // Re-attach event listeners
+        renderProducts(currentProducts); // Отрисовываем отфильтрованные продукты
+        setupProductEventListeners(); // Переустанавливаем слушатели событий
     }
 }
 
-// Method filter handler
+// Обработчик дополнительных методов фильтрации
 function handleMethodFilter(e) {
-    const method = e.target.dataset.method;
-    let filteredProducts = [...products];
+    const method = e.target.dataset.method; // Получаем выбранный метод
+    let filteredProducts = [...products]; // Создаем копию всех продуктов
 
+    // Удаляем активный класс у всех кнопок
     methodButtons.forEach(btn => btn.classList.remove('active'));
-    e.target.classList.add('active');
+    e.target.classList.add('active'); // Добавляем активный класс текущей кнопке
 
+    // Применяем фильтр в зависимости от метода
     switch (method) {
         case 'all':
-            filteredProducts = products;
+            filteredProducts = products; // Показываем все продукты
             break;
         case 'filter-price':
-            filteredProducts = products.filter(product => product.price >= 200);
+            filteredProducts = products.filter(product => product.price >= 200); // Продукты с ценой ≥ 200
             break;
         case 'filter-rating':
-            filteredProducts = products.filter(product => product.rating >= 4.5);
+            filteredProducts = products.filter(product => product.rating >= 4.5); // Продукты с рейтингом ≥ 4.5
             break;
         case 'filter-new':
-            filteredProducts = products.filter(product => product.isNew);
+            filteredProducts = products.filter(product => product.isNew); // Только новые продукты
             break;
         case 'filter-bestsellers':
             filteredProducts = products
                 .slice()
-                .sort((a, b) => b.popularity - a.popularity)
-                .slice(0, 8);
+                .sort((a, b) => b.popularity - a.popularity) // Сортировка по популярности
+                .slice(0, 8); // Первые 8 продуктов
             break;
         case 'filter-discount':
-            filteredProducts = products.filter(product => product.discount > 0);
+            filteredProducts = products.filter(product => product.discount > 0); // Продукты со скидкой
             break;
         case 'filter-custom':
             filteredProducts = products.map(product => ({
                 ...product,
-                name: `Custom ${product.name}`
+                name: `Custom ${product.name}` // Добавляем "Custom" к названию
             }));
             break;
         case 'reduce-total':
-            const totalValue = products.reduce((acc, product) => acc + product.price, 0);
-            alert(`Total value of all products: $${totalValue}`);
+            const totalValue = products.reduce((acc, product) => acc + product.price, 0); // Сумма цен всех продуктов
+            alert(`Общая стоимость всех продуктов: $${totalValue}`);
             return;
         case 'some-discounted':
-            const hasDiscount = products.some(product => product.discount > 0);
-            alert(`Are there discounted products? ${hasDiscount ? 'Yes' : 'No'}`);
+            const hasDiscount = products.some(product => product.discount > 0); // Проверка наличия скидок
+            alert(`Есть ли продукты со скидкой? ${hasDiscount ? 'Да' : 'Нет'}`);
             return;
         case 'every-rated':
-            const allHighRated = products.every(product => product.rating >= 4.0);
-            alert(`Are all products highly rated (4.0+)? ${allHighRated ? 'Yes' : 'No'}`);
+            const allHighRated = products.every(product => product.rating >= 4.0); // Проверка рейтинга ≥ 4.0
+            alert(`Все ли продукты имеют высокий рейтинг (4.0+)? ${allHighRated ? 'Да' : 'Нет'}`);
             return;
     }
 
-    currentProducts = filteredProducts;
-    renderProducts(currentProducts);
-    setupProductEventListeners(); // Re-attach event listeners
+    currentProducts = filteredProducts; // Обновляем текущие продукты
+    renderProducts(currentProducts); // Отрисовываем отфильтрованные продукты
+    setupProductEventListeners(); // Переустанавливаем слушатели событий
 }
 
-// Cart handlers
+// Обработчик добавления продукта в корзину
 function handleAddToCart(e) {
-    const productId = parseInt(e.target.dataset.id);
-    const product = products.find(p => p.id === productId);
+    const productId = parseInt(e.target.dataset.id); // Получаем ID продукта
+    const product = products.find(p => p.id === productId); // Находим продукт по ID
     
-    const cartItem = cart.find(item => item.id === productId);
+    const cartItem = cart.find(item => item.id === productId); // Проверяем, есть ли продукт в корзине
     if (cartItem) {
-        cartItem.quantity++;
+        cartItem.quantity++; // Увеличиваем количество, если продукт уже в корзине
     } else {
-        cart.push({ ...product, quantity: 1 });
+        cart.push({ ...product, quantity: 1 }); // Добавляем новый продукт с количеством 1
     }
 
-    updateCart();
-    showNotification(`${product.name} добавлен в корзину!`);
+    updateCart(); // Обновляем корзину
+    showNotification(`${product.name} добавлен в корзину!`); // Показываем уведомление
 }
 
+// Обновление состояния и отображения корзины
 function updateCart() {
-    localStorage.setItem('cart', JSON.stringify(cart));
-    cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+    localStorage.setItem('cart', JSON.stringify(cart)); // Сохраняем корзину в localStorage
+    cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0); // Обновляем счетчик товаров
     
-    cartItemsContainer.innerHTML = '';
-    let total = 0;
+    cartItemsContainer.innerHTML = ''; // Очищаем контейнер корзины
+    let total = 0; // Инициализируем общую сумму
 
+    // Создаем элементы для каждого товара в корзине
     cart.forEach(item => {
-        const itemTotal = item.price * item.quantity;
-        total += itemTotal;
+        const itemTotal = item.price * item.quantity; // Сумма для текущего товара
+        total += itemTotal; // Добавляем к общей сумме
 
         const cartItem = document.createElement('div');
         cartItem.className = 'cart-item';
@@ -454,12 +472,12 @@ function updateCart() {
             </div>
             <button class="cart-item-remove" data-id="${item.id}">×</button>
         `;
-        cartItemsContainer.appendChild(cartItem);
+        cartItemsContainer.appendChild(cartItem); // Добавляем элемент в контейнер
     });
 
-    cartTotal.textContent = `$${total.toFixed(2)}`;
+    cartTotal.textContent = `$${total.toFixed(2)}`; // Обновляем общую сумму
 
-    // Quantity and remove listeners
+    // Устанавливаем слушатели для кнопок изменения количества и удаления
     document.querySelectorAll('.quantity-btn').forEach(button => {
         button.addEventListener('click', handleQuantityChange);
     });
@@ -468,76 +486,83 @@ function updateCart() {
     });
 }
 
+// Обработчик изменения количества товара в корзине
 function handleQuantityChange(e) {
-    const productId = parseInt(e.target.dataset.id);
-    const isIncrease = e.target.classList.contains('increase');
+    const productId = parseInt(e.target.dataset.id); // Получаем ID продукта
+    const isIncrease = e.target.classList.contains('increase'); // Проверяем, увеличение или уменьшение
     
-    const cartItem = cart.find(item => item.id === productId);
+    const cartItem = cart.find(item => item.id === productId); // Находим товар в корзине
     if (cartItem) {
         if (isIncrease) {
-            cartItem.quantity++;
+            cartItem.quantity++; // Увеличиваем количество
         } else if (cartItem.quantity > 1) {
-            cartItem.quantity--;
+            cartItem.quantity--; // Уменьшаем количество, если больше 1
         } else {
-            cart = cart.filter(item => item.id !== productId);
+            cart = cart.filter(item => item.id !== productId); // Удаляем товар, если количество 1
         }
-        updateCart();
-        showNotification(`Количество обновлено для ${cartItem.name}`);
+        updateCart(); // Обновляем корзину
+        showNotification(`Количество обновлено для ${cartItem.name}`); // Показываем уведомление
     }
 }
 
+// Обработчик удаления товара из корзины
 function handleRemoveFromCart(e) {
-    const productId = parseInt(e.target.dataset.id);
-    cart = cart.filter(item => item.id !== productId);
-    updateCart();
-    showNotification('Товар удален из корзины');
+    const productId = parseInt(e.target.dataset.id); // Получаем ID продукта
+    cart = cart.filter(item => item.id !== productId); // Удаляем товар из корзины
+    updateCart(); // Обновляем корзину
+    showNotification('Товар удален из корзины'); // Показываем уведомление
 }
 
+// Отображение модального окна корзины
 function showCart() {
-    cartModal.style.display = 'block';
-    document.body.style.overflow = 'hidden';
+    cartModal.style.display = 'block'; // Показываем модальное окно
+    document.body.style.overflow = 'hidden'; // Отключаем прокрутку страницы
 }
 
+// Скрытие модального окна корзины
 function hideCart() {
-    cartModal.style.display = 'none';
-    document.body.style.overflow = 'auto';
+    cartModal.style.display = 'none'; // Скрываем модальное окно
+    document.body.style.overflow = 'auto'; // Включаем прокрутку страницы
 }
 
+// Обработчик оформления заказа
 function handleCheckout() {
     if (cart.length === 0) {
-        showNotification('Ваша корзина пуста!');
+        showNotification('Ваша корзина пуста!'); // Уведомление, если корзина пуста
         return;
     }
-    showNotification('Оформление заказа успешно!');
-    cart = [];
-    updateCart();
-    hideCart();
+    showNotification('Оформление заказа успешно!'); // Уведомление об успехе
+    cart = []; // Очищаем корзину
+    updateCart(); // Обновляем корзину
+    hideCart(); // Скрываем модальное окно
 }
 
-// Favorites handlers
+// Обработчик добавления/удаления продукта из избранного
 function handleToggleFavorite(e) {
-    const productId = parseInt(e.target.closest('button').dataset.id);
-    const product = products.find(p => p.id === productId);
-    const isFavorited = favorites.some(fav => fav.id === productId);
+    const productId = parseInt(e.target.closest('button').dataset.id); // Получаем ID продукта
+    const product = products.find(p => p.id === productId); // Находим продукт по ID
+    const isFavorited = favorites.some(fav => fav.id === productId); // Проверяем, есть ли в избранном
 
     if (isFavorited) {
-        favorites = favorites.filter(fav => fav.id !== productId);
-        showNotification(`${product.name} удален из избранного!`);
+        favorites = favorites.filter(fav => fav.id !== productId); // Удаляем из избранного
+        showNotification(`${product.name} удален из избранного!`); // Показываем уведомление
     } else {
-        favorites.push({ ...product });
-        showNotification(`${product.name} добавлен в избранное!`);
+        favorites.push({ ...product }); // Добавляем в избранное
+        showNotification(`${product.name} добавлен в избранное!`); // Показываем уведомление
     }
 
-    updateFavorites();
-    renderProducts(currentProducts); // Preserve filters
-    setupProductEventListeners(); // Re-attach event listeners
+    updateFavorites(); // Обновляем избранное
+    renderProducts(currentProducts); // Отрисовываем продукты, сохраняя фильтры
+    setupProductEventListeners(); // Переустанавливаем слушатели событий
 }
 
+// Обновление состояния и отображения избранного
 function updateFavorites() {
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-    favoritesCount.textContent = favorites.length;
+    localStorage.setItem('favorites', JSON.stringify(favorites)); // Сохраняем избранное в localStorage
+    favoritesCount.textContent = favorites.length; // Обновляем счетчик избранного
 
-    favoritesItemsContainer.innerHTML = '';
+    favoritesItemsContainer.innerHTML = ''; // Очищаем контейнер избранного
+    // Создаем элементы для каждого избранного продукта
     favorites.forEach(item => {
         const favoriteItem = document.createElement('div');
         favoriteItem.className = 'favorites-item';
@@ -549,51 +574,56 @@ function updateFavorites() {
             </div>
             <button class="favorites-item-remove" data-id="${item.id}">×</button>
         `;
-        favoritesItemsContainer.appendChild(favoriteItem);
+        favoritesItemsContainer.appendChild(favoriteItem); // Добавляем элемент в контейнер
     });
 
-    // Remove favorite listeners
+    // Устанавливаем слушатели для кнопок удаления из избранного
     document.querySelectorAll('.favorites-item-remove').forEach(button => {
         button.addEventListener('click', handleRemoveFromFavorites);
     });
 }
 
+// Обработчик удаления продукта из избранного
 function handleRemoveFromFavorites(e) {
-    const productId = parseInt(e.target.dataset.id);
-    const product = products.find(p => p.id === productId);
-    favorites = favorites.filter(fav => fav.id !== productId);
-    updateFavorites();
-    renderProducts(currentProducts); // Preserve filters
-    setupProductEventListeners(); // Re-attach event listeners
-    showNotification(`${product.name} удален из избранного!`);
+    const productId = parseInt(e.target.dataset.id); // Получаем ID продукта
+    const product = products.find(p => p.id === productId); // Находим продукт по ID
+    favorites = favorites.filter(fav => fav.id !== productId); // Удаляем из избранного
+    updateFavorites(); // Обновляем избранное
+    renderProducts(currentProducts); // Отрисовываем продукты, сохраняя фильтры
+    setupProductEventListeners(); // Переустанавливаем слушатели событий
+    showNotification(`${product.name} удален из избранного!`); // Показываем уведомление
 }
 
+// Отображение модального окна избранного
 function showFavorites() {
-    favoritesModal.style.display = 'block';
-    document.body.style.overflow = 'hidden';
+    favoritesModal.style.display = 'block'; // Показываем модальное окно
+    document.body.style.overflow = 'hidden'; // Отключаем прокрутку страницы
 }
 
+// Скрытие модального окна избранного
 function hideFavorites() {
-    favoritesModal.style.display = 'none';
-    document.body.style.overflow = 'auto';
+    favoritesModal.style.display = 'none'; // Скрываем модальное окно
+    document.body.style.overflow = 'auto'; // Включаем прокрутку страницы
 }
 
+// Обработчик очистки списка избранного
 function handleClearFavorites() {
     if (favorites.length === 0) {
-        showNotification('Список избранного пуст!');
+        showNotification('Список избранного пуст!'); // Уведомление, если избранное пусто
         return;
     }
-    favorites = [];
-    updateFavorites();
-    renderProducts(currentProducts); // Preserve filters
-    setupProductEventListeners(); // Re-attach event listeners
-    showNotification('Избранное очищено!');
+    favorites = []; // Очищаем избранное
+    updateFavorites(); // Обновляем избранное
+    renderProducts(currentProducts); // Отрисовываем продукты, сохраняя фильтры
+    setupProductEventListeners(); // Переустанавливаем слушатели событий
+    showNotification('Избранное очищено!'); // Показываем уведомление
 }
 
+// Отображение уведомления с сообщением
 function showNotification(message) {
-    notificationMessage.textContent = message;
-    notification.classList.add('show');
+    notificationMessage.textContent = message; // Устанавливаем текст уведомления
+    notification.classList.add('show'); // Показываем уведомление
     setTimeout(() => {
-        notification.classList.remove('show');
+        notification.classList.remove('show'); // Скрываем через 3 секунды
     }, 3000);
 }
