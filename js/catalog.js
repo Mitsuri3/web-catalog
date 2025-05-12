@@ -179,7 +179,188 @@ const products = [
         isNew: true,
         popularity: 93,
         discount: 0
+    },
+    { 
+        id: 16, 
+        name: "Advanced UI Kit", 
+        category: "design", 
+        price: 199, 
+        rating: 4.7, 
+        img: "https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1074&q=80", 
+        description: "Professional UI kit with 50+ customizable components for web and mobile.", 
+        isNew: true,
+        popularity: 88,
+        discount: 0
+    },
+    { 
+        id: 17, 
+        name: "API Integration Service", 
+        category: "development", 
+        price: 499, 
+        rating: 4.8, 
+        img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80", 
+        description: "Seamless integration of third-party APIs into your existing system.", 
+        isNew: false,
+        popularity: 85,
+        discount: 10
+    },
+    { 
+        id: 18, 
+        name: "Influencer Marketing Package", 
+        category: "marketing", 
+        price: 699, 
+        rating: 4.6, 
+        img: "https://images.unsplash.com/photo-1525877442103-5ddb2089b2bb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80", 
+        description: "Collaboration with 5 influencers in your niche for brand promotion.", 
+        isNew: true,
+        popularity: 89,
+        discount: 0
+    },
+    { 
+        id: 19, 
+        name: "Brand Naming & Slogan", 
+        category: "branding", 
+        price: 349, 
+        rating: 4.5, 
+        img: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80", 
+        description: "Creative brand name and slogan development with trademark check.", 
+        isNew: false,
+        popularity: 82,
+        discount: 0
+    },
+    { 
+        id: 20, 
+        name: "WordPress Speed Optimization", 
+        category: "development", 
+        price: 249, 
+        rating: 4.7, 
+        img: "https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&auto=format&fit=crop&w=1064&q=80", 
+        description: "Boost your WordPress site speed with advanced optimization techniques.", 
+        isNew: false,
+        popularity: 87,
+        discount: 0
+    },
+    { 
+        id: 21, 
+        name: "Social Media Ad Creatives", 
+        category: "marketing", 
+        price: 179, 
+        rating: 4.4, 
+        img: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1074&q=80", 
+        description: "10 high-converting ad designs for Facebook & Instagram.", 
+        isNew: true,
+        popularity: 83,
+        discount: 0
+    },
+    { 
+        id: 22, 
+        name: "3D Product Rendering", 
+        category: "design", 
+        price: 399, 
+        rating: 4.8, 
+        img: "https://images.unsplash.com/photo-1626785774573-4b799315345d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1171&q=80", 
+        description: "Hyper-realistic 3D renders for e-commerce and marketing materials.", 
+        isNew: true,
+        popularity: 91,
+        discount: 0
+    },
+    { 
+        id: 23, 
+        name: "Mobile App Development", 
+        category: "development", 
+        price: 1499, 
+        rating: 4.9, 
+        img: "https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80", 
+        description: "Custom iOS & Android app with backend and admin panel.", 
+        isNew: false,
+        popularity: 94,
+        discount: 15
+    },
+    { 
+        id: 24, 
+        name: "Email Marketing Campaign", 
+        category: "marketing", 
+        price: 299, 
+        rating: 4.5, 
+        img: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1172&q=80", 
+        description: "Complete email sequence setup with A/B testing and analytics.", 
+        isNew: false,
+        popularity: 84,
+        discount: 0
+    },
+    { 
+        id: 25, 
+        name: "Brand Guidelines Book", 
+        category: "branding", 
+        price: 549, 
+        rating: 4.7, 
+        img: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?ixlib=rb-4.0.3&auto=format&fit=crop&w=1173&q=80", 
+        description: "Comprehensive brand manual with logo usage, colors, and typography rules.", 
+        isNew: true,
+        popularity: 86,
+        discount: 0
+    },
+    { 
+        id: 26, 
+        name: "Landing Page Design", 
+        category: "design", 
+        price: 349, 
+        rating: 4.6, 
+        img: "https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&auto=format&fit=crop&w=1064&q=80", 
+        description: "High-converting landing page with mobile optimization.", 
+        isNew: false,
+        popularity: 85,
+        discount: 0
+    },
+    { 
+        id: 27, 
+        name: "Shopify Store Setup", 
+        category: "development", 
+        price: 799, 
+        rating: 4.8, 
+        img: "https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80", 
+        description: "Fully customized Shopify store with product import and SEO setup.", 
+        isNew: true,
+        popularity: 90,
+        discount: 0
+    },
+    { 
+        id: 28, 
+        name: "Content Marketing Strategy", 
+        category: "marketing", 
+        price: 599, 
+        rating: 4.7, 
+        img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80", 
+        description: "3-month content plan with blog posts, videos, and social media integration.", 
+        isNew: false,
+        popularity: 87,
+        discount: 0
+    },
+    { 
+        id: 29, 
+        name: "Animated Logo Reveal", 
+        category: "branding", 
+        price: 299, 
+        rating: 4.9, 
+        img: "https://images.unsplash.com/photo-1626785774573-4b799315345d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1171&q=80", 
+        description: "10-second professional logo animation for intros and branding.", 
+        isNew: true,
+        popularity: 93,
+        discount: 0
+    },
+    { 
+        id: 30, 
+        name: "UX Audit & Redesign", 
+        category: "design", 
+        price: 899, 
+        rating: 4.8, 
+        img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80", 
+        description: "In-depth UX analysis and redesign for better user engagement.", 
+        isNew: false,
+        popularity: 92,
+        discount: 0
     }
+    
 ];
 
 // Элементы DOM для работы с интерфейсом
@@ -386,7 +567,7 @@ function handleMethodFilter(e) {
             filteredProducts = products; // Показываем все продукты
             break;
         case 'filter-price':
-            filteredProducts = products.filter(product => product.price >= 200); // Продукты с ценой ≥ 200
+            filteredProducts = products.filter(product => product.price >= 700); // Продукты с ценой > 700
             break;
         case 'filter-rating':
             filteredProducts = products.filter(product => product.rating >= 4.9); // Продукты с рейтингом ≥ 4.5
@@ -447,15 +628,15 @@ function handleAddToCart(e) {
 // Обновление состояния и отображения корзины
 function updateCart() {
     localStorage.setItem('cart', JSON.stringify(cart)); // Сохраняем корзину в localStorage
-    cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0); // Обновляем счетчик товаров
+    cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0); 
     
-    cartItemsContainer.innerHTML = ''; // Очищаем контейнер корзины
-    let total = 0; // Инициализируем общую сумму
+    cartItemsContainer.innerHTML = ''; 
+    let total = 0; 
 
     // Создаем элементы для каждого товара в корзине
     cart.forEach(item => {
-        const itemTotal = item.price * item.quantity; // Сумма для текущего товара
-        total += itemTotal; // Добавляем к общей сумме
+        const itemTotal = item.price * item.quantity; 
+        total += itemTotal; 
 
         const cartItem = document.createElement('div');
         cartItem.className = 'cart-item';
@@ -472,10 +653,10 @@ function updateCart() {
             </div>
             <button class="cart-item-remove" data-id="${item.id}">×</button>
         `;
-        cartItemsContainer.appendChild(cartItem); // Добавляем элемент в контейнер
+        cartItemsContainer.appendChild(cartItem); 
     });
 
-    cartTotal.textContent = `$${total.toFixed(2)}`; // Обновляем общую сумму
+    cartTotal.textContent = `$${total.toFixed(2)}`; 
 
     // Устанавливаем слушатели для кнопок изменения количества и удаления
     document.querySelectorAll('.quantity-btn').forEach(button => {
